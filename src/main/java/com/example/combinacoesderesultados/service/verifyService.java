@@ -28,7 +28,7 @@ public class verifyService {
         //thread para calcular possíveis resultados do time 1
         tasks.add(() -> {
             try {
-                testarResultado(pontos, pontuacaoTime.getTime1(), 0, combinacaoTime1, 1);
+                testarResultado(pontos, pontuacaoTime.getTime1(), 0, combinacaoTime1);
                 return null;
             } catch (StackOverflowError e) {
 
@@ -41,7 +41,7 @@ public class verifyService {
         tasks.add(() -> {
             try {
 
-                testarResultado(pontos, pontuacaoTime.getTime2(), 0, combinacaoTime2, 2);
+                testarResultado(pontos, pontuacaoTime.getTime2(), 0, combinacaoTime2);
                 return null;
             } catch (StackOverflowError e) {
                 throw new ErrorResponse("Erro ao tentar calcular placares: "+e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -85,7 +85,7 @@ public class verifyService {
 
     }
 
-    public static void testarResultado(PontosEnum[] pontos, Integer pontuacaoTime, Integer index, AtomicInteger combinacoes, Integer numero) {
+    public static void testarResultado(PontosEnum[] pontos, Integer pontuacaoTime, Integer index, AtomicInteger combinacoes) {
         if (pontuacaoTime == 0) {
             combinacoes.incrementAndGet();
             return;
@@ -95,13 +95,11 @@ public class verifyService {
             return;
         }
 
-        System.out.println(numero);
-
 
         // Incluir o valor atual do ponto
-        testarResultado(pontos, pontuacaoTime - pontos[index].getValue(), index, combinacoes, numero);
+        testarResultado(pontos, pontuacaoTime - pontos[index].getValue(), index, combinacoes);
 
         // Excluir o valor atual do ponto e passar para o próximo
-        testarResultado(pontos, pontuacaoTime, index + 1, combinacoes, numero);
+        testarResultado(pontos, pontuacaoTime, index + 1, combinacoes);
     }
 }
